@@ -1,2 +1,2 @@
 # Locadora
-Projeto de estudo de uma vídeo locadora
+Projeto de estudo de uma vídeo locadora.
