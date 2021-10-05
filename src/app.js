@@ -12,6 +12,7 @@ const customer = require('./customers')
 
 //instanciando um novo servidor
 const app = express()
+app.use(express.json())
 app.use('/', routes)
 
 //crio uma constante para definir que porta o servidor rodará
