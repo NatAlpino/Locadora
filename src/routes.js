@@ -6,7 +6,7 @@ const customers = [];
 
 //cria-se uma rota com o endereço
 routes.get('/', function (req, res) {
-    //req - request = requisiçã
+    //req - request = requisição
     //res - response = resposta
     //resposta do servidor será hello word
     res.send('Hello World!')

@@ -12,8 +12,13 @@ const customer = require('./customers')
 
 //instanciando um novo servidor
 const app = express()
+
+//habilita o uso do json
 app.use(express.json())
+
+//importa as rotas para o servidor
 app.use('/', routes)
+
 
 //crio uma constante para definir que porta o servidor rodará
 const port = 3000
