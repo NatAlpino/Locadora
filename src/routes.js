@@ -1,13 +1,19 @@
 const express = require('express');
 const Customer = require('./customers');
+const Product = require('./products');
 const routes = express.Router();
 const httpStatus = require('http-status');
 
 //cria um novo array
 const customers = [];
+const products = [];
 
-const RESPONSE_NOT_FOUND = {
+const RESPONSE_NOT_FOUND_C = {
     "message": "Customer not found!"
+}
+
+const RESPONSE_NOT_FOUND_P = {
+    "message": "Product not found!"
 }
 
 //cria-se uma rota com o endereço
@@ -45,7 +51,7 @@ routes.get('/customers/:id', (req, res) => {
     const response = customers.find(x => x.id == id)
     if (!response) {
         //404 (não encontrado)
-        return res.status(httpStatus.NOT_FOUND).json(RESPONSE_NOT_FOUND)
+        return res.status(httpStatus.NOT_FOUND).json(RESPONSE_NOT_FOUND_C)
     }
     return res.status(httpStatus.OK).json(customers.find(x => x.id == id))
 })
@@ -60,7 +66,7 @@ routes.put('/customers/:id', (req, res) => {
     //x = o meu objeto customer
     const idx = customers.findIndex(x => x.id == id)
     if (idx < 0) {
-        return res.status(httpStatus.NOT_FOUND).json(RESPONSE_NOT_FOUND)
+        return res.status(httpStatus.NOT_FOUND).json(RESPONSE_NOT_FOUND_C)
     }
     const updatedCustomer = customers[idx]
     //atualizar os valores de cada propriedade com os novos valores a ser atualizados
@@ -84,12 +90,67 @@ routes.delete('/customers/:id', (req, res) => {
     //pequisar o id dentro do array
     const idx = customers.findIndex(x => x.id == id)
     if (idx < 0) {
-        return res.status(httpStatus.NOT_FOUND).json(RESPONSE_NOT_FOUND)
+        return res.status(httpStatus.NOT_FOUND).json(RESPONSE_NOT_FOUND_C)
     }
     customers.splice(idx, 1)
     //204
-    return res.status(http.Status.NO_CONTENT).send()
+    return res.status(httpStatus.NO_CONTENT).send()
 })
+
+routes.post('/products', (req, res) => {
+    const { description, quantityStock, quantityAvailable }  = req.body;
+    const id = products.length + 1;
+    const product = new Product(id, description, quantityStock, quantityAvailable);
+    products.push(product);
+    return res.status(httpStatus.CREATED).json(product);
+});
+
+routes.get('/products', (req, res) => {
+    return res.status(httpStatus.OK).json(products);
+});
+
+routes.get('/products/:id', (req, res) => {
+    const { id } = req.params
+    const response = products.find(x => x.id == id)
+    if (!response) {
+        return res.status(httpStatus.NOT_FOUND).json(RESPONSE_NOT_FOUND_P)
+    }
+    return res.status(httpStatus.OK).json(products.find(x => x.id == id))
+});
+
+routes.put('/products/:id', (req, res) => {
+    const { id } = req.params
+    const { description, quantityStock, quantityAvailable } = req.body
+    const idx = products.findIndex(x => x.id == id)
+    if (idx < 0) {
+        return res.status(httpStatus.NOT_FOUND).json(RESPONSE_NOT_FOUND_P)
+    }
+    const updatedProduct = products[idx]
+    if (description) {
+        updatedProduct.description = description
+    }
+    if (quantityStock) {
+        updatedProduct.quantityStock = quantityStock
+    }
+    if (quantityAvailable) {
+        updatedProduct.quantityAvailable = quantityAvailable
+    }
+    updatedProduct.updated_at = new Date()
+    products[idx] = updatedProduct;
+    return res.status(httpStatus.OK).json (products.find(x => x.id == id))
+});
+
+routes.delete('/products/:id', (req, res) => {
+    const id = req.params.id
+    const idx = products.findIndex(x => x.id == id)
+    if (idx < 0) {
+        return res.status(httpStatus.NOT_FOUND).json(RESPONSE_NOT_FOUND_P)
+    }
+    products.splice(idx, 1)
+    return res.status(httpStatus.NO_CONTENT).send()
+});
+
+
 
 
 module.exports = routes;

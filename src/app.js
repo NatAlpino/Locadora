@@ -8,8 +8,6 @@ const express = require('express')
 
 const routes = require('./routes')
 
-const customer = require('./customers')
-
 //instanciando um novo servidor
 const app = express()
 
