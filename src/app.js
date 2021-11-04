@@ -6,7 +6,10 @@
 //carrego a lib do express (serviço da aplicação)
 const express = require('express')
 
-const routes = require('./routes')
+//importa as rotas
+const customerRoutes = require('./customers/customers-routes')
+const productRoutes = require('./products/products-routes')
+
 
 //instanciando um novo servidor
 const app = express()
@@ -15,7 +18,10 @@ const app = express()
 app.use(express.json())
 
 //importa as rotas para o servidor
-app.use('/', routes)
+app.use('/', [
+  customerRoutes, 
+  productRoutes
+])
 
 
 //crio uma constante para definir que porta o servidor rodará

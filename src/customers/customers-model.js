@@ -12,5 +12,5 @@ class Customer {
     }
 }
 
-
+//exporta a classe Customer
 module.exports = Customer
